@@ -1,4 +1,4 @@
-import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=926-picture-transform-20261013';
+import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=927-four-pictures-20261013';
 import { createRenderer } from './render.mjs';
 
 let state = createState();
@@ -98,9 +98,15 @@ transformApply.addEventListener('click', () => {
 function render() {
   draw(state);
   document.querySelector('#status').textContent = `${state.remaining} stitches in cloth · ${192 - state.remaining} in thread`;
+  const newPictureEndNotes = {
+    blank: 'Nothing lost. Just no longer blank cloth.',
+    lantern: 'Nothing lost. Just no longer a lantern.',
+    fern: 'Nothing lost. Just no longer a fern.',
+    window: 'Nothing lost. Just no longer a window.',
+  };
   document.querySelector('#end-note').textContent = state.remaining === 192
     ? 'Find the end.' : state.remaining === 0
-      ? `Nothing lost. Just no longer ${state.pattern === 'custom' ? 'your picture' : state.pattern === 'stairs' ? 'stairs' : `a ${state.pattern}`}.`
+      ? newPictureEndNotes[state.pattern] ?? `Nothing lost. Just no longer ${state.pattern === 'custom' ? 'your picture' : state.pattern === 'stairs' ? 'stairs' : `a ${state.pattern}`}.`
       : 'The next loop is holding the edge.';
   pattern.value = state.pattern === 'custom' ? '' : state.pattern;
   const locked = state.remaining !== 192;

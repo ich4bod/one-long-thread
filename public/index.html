@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
   <link rel="stylesheet" href="style.css?v=926-picture-transform-20261013">
-  <script type="module" src="app.mjs?v=926-picture-transform-20261013"></script>
+  <script type="module" src="app.mjs?v=927-four-pictures-20261013"></script>
 </head>
 <body>
   <main>
@@ -44,13 +44,20 @@
       <details id="design">
         <summary id="design-title">Dye your own</summary>
         <label class="picture" for="pattern">Picture
-          <select id="pattern" aria-describedby="pattern-help">
+          <select id="pattern" aria-describedby="pattern-help picture-new-motifs-help">
             <option value="moth">Moth</option>
             <option value="stairs">Stairs</option>
             <option value="comet">Comet</option>
+            <optgroup label="Four more pictures">
+              <option value="blank">Blank cloth</option>
+              <option value="lantern">Lantern</option>
+              <option value="fern">Fern</option>
+              <option value="window">Window</option>
+            </optgroup>
           </select>
         </label>
         <p id="pattern-help">Choosing a picture knits all 192 stitches again.</p>
+        <p id="picture-new-motifs-help">A blank cloth, a lantern, a fern and a window use the same 192 sections and four dyes. Choosing starts a new picture; pulling still releases the very same colored strand.</p>
         <p id="design-instruction">Choose a color, then tap a stitch. Dyeing changes the color, not the thread.</p>
         <label class="dye-area" for="dye-area">Dye area
           <select id="dye-area" aria-describedby="dye-area-help">

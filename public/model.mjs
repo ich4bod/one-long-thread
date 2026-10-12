@@ -15,12 +15,35 @@ function presetColor(pattern, r, c) {
     const edge = Math.floor(r / 2);
     return c === edge ? 2 : c <= edge ? 3 : 0;
   }
+  if (pattern === 'blank') return 0;
+  if (pattern === 'lantern') {
+    if (r >= 4 && r <= 11 && c >= 3 && c <= 8) {
+      if (c === 3 || c === 8 || r === 4 || r === 11) return 1;
+      if (c === 5 || c === 6) return 2;
+      return 0;
+    }
+    return (r === 12 || r === 13) && (c === 5 || c === 6) ? 3 : 0;
+  }
+  if (pattern === 'fern') {
+    if (c === 5 && r >= 1 && r <= 14) return 3;
+    const leaves = [[3, 4], [5, 4], [7, 3], [9, 3], [11, 2], [13, 1]];
+    for (const [row, halfWidth] of leaves) {
+      if (r === row && Math.abs(c - 5) <= halfWidth) return 1;
+    }
+    return 0;
+  }
+  if (pattern === 'window') {
+    if (r < 3 || r > 12 || c < 2 || c > 9) return 0;
+    if (c === 2 || c === 9 || r === 3 || r === 12) return 3;
+    if (c === 5 || c === 6 || r === 7 || r === 8) return 0;
+    return 2;
+  }
   if ((r - 10) ** 2 + (c - 7) ** 2 <= 9) return 2;
   return r >= 1 && r <= 9 && Math.abs(c - (r - 2)) <= 1 ? 1 : 0;
 }
 
 export function createState({ pattern = 'moth' } = {}) {
-  if (!['moth', 'stairs', 'comet'].includes(pattern)) {
+  if (!['moth', 'stairs', 'comet', 'blank', 'lantern', 'fern', 'window'].includes(pattern)) {
     throw new RangeError(`Unknown pattern: ${pattern}`);
   }
   const colors = Array.from({ length: SECTIONS }, (_, i) => {
@@ -119,7 +142,7 @@ export function transformPicture(state, kind) {
 }
 
 export function choosePattern(state, name) {
-  if (!['moth', 'stairs', 'comet'].includes(name)) {
+  if (!['moth', 'stairs', 'comet', 'blank', 'lantern', 'fern', 'window'].includes(name)) {
     throw new RangeError(`Unknown pattern: ${name}`);
   }
   return createState({ pattern: name });
