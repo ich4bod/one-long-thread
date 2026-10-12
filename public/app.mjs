@@ -4,6 +4,8 @@ import { createRenderer } from './render.mjs';
 let state = createState();
 let knitTimer = null;
 let gesture = null;
+let dyeStroke = null;
+let suppressClickTarget = null;
 const undoPictures = [];
 const redoPictures = [];
 const undoDye = document.querySelector('#dye-undo');
@@ -19,6 +21,7 @@ const colorNames = ['Cream', 'Rust', 'Coral', 'Moss'];
 const colorValues = ['#f4e6c8', '#bf593f', '#ee997b', '#819480'];
 const pattern = document.querySelector('#pattern');
 const dyeArea = document.querySelector('#dye-area');
+const dyeDrag = document.querySelector('#dye-drag');
 let chosenArea = dyeArea.value;
 const pictureTransform = document.querySelector('#picture-transform');
 const transformApply = document.querySelector('#picture-transform-apply');
@@ -58,12 +61,12 @@ function pictureSnapshot(picture) {
   return { pattern: picture.pattern, colors: picture.colors.slice() };
 }
 function canEditPicture() {
-  return state.remaining === 192 && knitTimer === null && gesture === null;
+  return state.remaining === 192 && knitTimer === null && gesture === null && dyeStroke === null;
 }
-function commitPicture(next) {
-  if (!canEditPicture() || (next.pattern === state.pattern &&
-      next.colors.every((color, index) => color === state.colors[index]))) return;
-  undoPictures.push(pictureSnapshot(state));
+function commitPicture(next, before = state) {
+  if (!canEditPicture() || (next.pattern === before.pattern &&
+      next.colors.every((color, index) => color === before.colors[index]))) return;
+  undoPictures.push(pictureSnapshot(before));
   if (undoPictures.length > 12) undoPictures.shift();
   redoPictures.length = 0;
   state = { ...state, ...pictureSnapshot(next) };
@@ -88,6 +91,11 @@ function refreshTransform() {
   pictureTransform.disabled = !canEditPicture();
   transformApply.disabled = !canApplyTransform(transformCandidate());
 }
+function refreshDyeDrag() {
+  const eligible = state.remaining === 192 && dyeArea.value === 'stitch' && knitTimer === null && gesture === null;
+  dyeDrag.disabled = !eligible || dyeStroke !== null;
+  grid.classList.toggle('dye-drag-enabled', dyeDrag.checked && eligible);
+}
 pictureTransform.addEventListener('change', refreshTransform);
 transformApply.addEventListener('click', () => {
   const candidate = transformCandidate();
@@ -110,7 +118,10 @@ function render() {
       : 'The next loop is holding the edge.';
   pattern.value = state.pattern === 'custom' ? '' : state.pattern;
   const locked = state.remaining !== 192;
+  const competing = knitTimer !== null || gesture !== null || dyeStroke !== null;
   dyeArea.disabled = !canEditPicture();
+  pattern.disabled = dyeStroke !== null;
+  refreshDyeDrag();
   refreshTransform();
   undoDye.disabled = !canEditPicture() || undoPictures.length === 0;
   redoDye.disabled = !canEditPicture() || redoPictures.length === 0;
@@ -118,7 +129,7 @@ function render() {
     ? 'Knit back before dyeing.'
     : 'Choose a color, then tap a stitch. Dyeing changes the color, not the thread.';
   for (const button of palette) {
-    button.disabled = locked;
+    button.disabled = locked || competing;
     button.setAttribute('aria-pressed', String(Number(button.dataset.color) === chosenColor));
   }
   for (let position = 0; position < stitches.length; position++) {
@@ -126,7 +137,7 @@ function render() {
     const color = state.colors[Number(button.dataset.index)];
     const r = 15 - Math.floor(position / 12);
     const c = position % 12;
-    button.disabled = locked;
+    button.disabled = locked || (competing && dyeStroke === null);
     button.style.setProperty('--dye', colorValues[color]);
     button.setAttribute('aria-label', `Row ${r + 1}, stitch ${c + 1}: ${colorNames[color]}`);
   }
@@ -136,16 +147,19 @@ function cancelKnitting() {
   knitTimer = null;
 }
 function pullStitches(count) {
+  finishDyeStroke();
   cancelKnitting();
   state = pull(state, count);
   render();
 }
 function knitStitches(count) {
+  finishDyeStroke();
   cancelKnitting();
   state = knit(state, count);
   render();
 }
 function knitBack() {
+  finishDyeStroke();
   cancelGesture();
   cancelKnitting();
   if (state.remaining === 192 || document.hidden) return;
@@ -164,6 +178,29 @@ function knitBack() {
   knitTimer = setTimeout(batch, 120);
 }
 
+function finishDyeStroke() {
+  if (!dyeStroke) return;
+  const stroke = dyeStroke;
+  dyeStroke = null;
+  if (stroke.captureTarget.hasPointerCapture(stroke.pointerId)) {
+    stroke.captureTarget.releasePointerCapture(stroke.pointerId);
+  }
+  suppressClickTarget = stroke.startButton;
+  if (stroke.changed) commitPicture(pictureSnapshot(state), stroke.before);
+  else render();
+}
+function dyeAtPoint(stroke, clientX, clientY) {
+  const hit = document.elementFromPoint(clientX, clientY);
+  const button = hit instanceof Element ? hit.closest('#paint-grid button[data-index]') : null;
+  if (!button || button.closest('#paint-grid') !== grid || !grid.contains(button) || button.disabled) return;
+  const index = Number(button.dataset.index);
+  if (!Number.isInteger(index) || stroke.visited.has(index)) return;
+  stroke.visited.add(index);
+  if (state.colors[index] === stroke.color) return;
+  state = paintArea(state, index, stroke.color, 'stitch');
+  stroke.changed = true;
+  render();
+}
 function cancelGesture() {
   if (!gesture) return;
   const pointerId = gesture.pointerId;
@@ -171,6 +208,7 @@ function cancelGesture() {
   if (handle.hasPointerCapture(pointerId)) handle.releasePointerCapture(pointerId);
 }
 function stop() {
+  finishDyeStroke();
   cancelKnitting();
   cancelGesture();
 }
@@ -233,7 +271,51 @@ dyeArea.addEventListener('change', () => {
     return;
   }
   chosenArea = dyeArea.value;
+  render();
 });
+dyeDrag.addEventListener('change', () => render());
+grid.addEventListener('pointerdown', event => {
+  if (dyeStroke || !event.isPrimary || event.button !== 0 || !dyeDrag.checked || dyeDrag.disabled) return;
+  const button = event.target instanceof Element ? event.target.closest('#paint-grid button[data-index]') : null;
+  if (!button || button.closest('#paint-grid') !== grid || !grid.contains(button) || button.disabled) return;
+  event.preventDefault();
+  suppressClickTarget = null;
+  dyeStroke = {
+    pointerId: event.pointerId,
+    captureTarget: button,
+    startButton: button,
+    before: pictureSnapshot(state),
+    color: chosenColor,
+    visited: new Set(),
+    changed: false,
+  };
+  button.setPointerCapture(event.pointerId);
+  dyeAtPoint(dyeStroke, event.clientX, event.clientY);
+  render();
+});
+document.addEventListener('pointermove', event => {
+  if (!dyeStroke || dyeStroke.pointerId !== event.pointerId) return;
+  const samples = event.getCoalescedEvents?.();
+  for (const sample of samples?.length ? samples : [event]) {
+    dyeAtPoint(dyeStroke, sample.clientX, sample.clientY);
+  }
+});
+for (const type of ['pointerup', 'pointercancel']) {
+  document.addEventListener(type, event => {
+    if (dyeStroke?.pointerId === event.pointerId) finishDyeStroke();
+  });
+}
+grid.addEventListener('lostpointercapture', event => {
+  if (dyeStroke?.pointerId === event.pointerId) finishDyeStroke();
+});
+grid.addEventListener('click', event => {
+  if (event.detail === 0 || !suppressClickTarget) return;
+  const button = event.target instanceof Element ? event.target.closest('#paint-grid button[data-index]') : null;
+  if (button !== suppressClickTarget) return;
+  suppressClickTarget = null;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+}, true);
 for (const button of palette) {
   button.addEventListener('click', () => {
     if (state.remaining !== 192) return;

@@ -45,6 +45,9 @@ select { font: inherit; color: var(--cream); background: var(--tray); border: 1p
 .picture { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
 #design .dye-area { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 16px/1.5 system-ui, sans-serif; min-height: 45px; }
 #design #dye-area { min-width: 45px; }
+#dye-drag-label { display: flex; align-items: center; gap: 8px; min-height: 45px; width: fit-content; font: 16px/1.5 system-ui, sans-serif; cursor: pointer; }
+#dye-drag { width: 20px; height: 20px; margin: 0; accent-color: var(--coral); }
+#paint-grid.dye-drag-enabled { touch-action: none; }
 .palette { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
 .palette button { color: var(--table); background: var(--dye); border: 2px solid transparent; }
 [data-color="0"] { --dye: var(--cream); }

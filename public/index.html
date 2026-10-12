@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css?v=926-picture-transform-20261013">
-  <script type="module" src="app.mjs?v=927-four-pictures-20261013"></script>
+  <link rel="stylesheet" href="style.css?v=930-dye-drag-20261013">
+  <script type="module" src="app.mjs?v=930-dye-drag-20261013"></script>
 </head>
 <body>
   <main>
@@ -68,6 +68,8 @@
           </select>
         </label>
         <p id="dye-area-help">Choose how far one tap dyes: one stitch, its connected same-color patch, its physical row, or its physical column. A patch joins only across shared edges. Undo treats the whole tap as one edit.</p>
+        <label id="dye-drag-label" for="dye-drag"><input id="dye-drag" type="checkbox" aria-describedby="dye-drag-help"> Drag dye across stitches</label>
+        <p id="dye-drag-help">With One stitch chosen, drag across the editor to dye the stitches you actually touch. One drag is one Undo step. Releasing, Stop or leaving the page ends the stroke; the dyed colors stay. Keyboard taps still dye one stitch.</p>
         <div class="palette">
           <button type="button" data-color="0" aria-pressed="true">Cream</button>
           <button type="button" data-color="1" aria-pressed="false">Rust</button>
