@@ -59,6 +59,11 @@ const assert=require('node:assert/strict');
    const stopped=(await state()).remaining;await page.waitForTimeout(400);assert.equal((await state()).remaining,stopped);assert(stopped<192);
    await page.locator('#knit-back').click();await page.locator('#pull-one').click();
    const interrupted=(await state()).remaining;await page.waitForTimeout(400);assert.equal((await state()).remaining,interrupted);
+   await page.locator('#knit-back').click();
+   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
+   const hiddenStop=(await state()).remaining;await page.waitForTimeout(400);assert.equal((await state()).remaining,hiddenStop);
+   await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});
+   await page.waitForTimeout(250);assert.equal((await state()).remaining,hiddenStop);
    await page.locator('#motion').uncheck();await page.locator('#knit-back').click();assert.equal((await state()).remaining,192);
   }
   assert.deepEqual(errors,[]);
