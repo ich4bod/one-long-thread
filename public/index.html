@@ -41,6 +41,27 @@
     </div>
     <div class="notes">
       <label class="motion"><input id="motion" type="checkbox" checked> Gentle transitions</label>
+      <details id="design">
+        <summary>Dye your own</summary>
+        <label class="picture" for="pattern">Picture
+          <select id="pattern" aria-describedby="pattern-help">
+            <option value="moth">Moth</option>
+            <option value="stairs">Stairs</option>
+            <option value="comet">Comet</option>
+          </select>
+        </label>
+        <p id="pattern-help">Choosing a picture knits all 192 stitches again.</p>
+        <p id="design-instruction">Choose a color, then tap a stitch. Dyeing changes the color, not the thread.</p>
+        <div class="palette">
+          <button type="button" data-color="0" aria-pressed="true">Cream</button>
+          <button type="button" data-color="1" aria-pressed="false">Rust</button>
+          <button type="button" data-color="2" aria-pressed="false">Coral</button>
+          <button type="button" data-color="3" aria-pressed="false">Moss</button>
+        </div>
+        <div class="editor-scroll">
+          <div id="paint-grid" aria-describedby="design-instruction"></div>
+        </div>
+      </details>
       <details id="about">
         <summary>Is this really knitting?</summary>
         <p>Knitted cloth is made of loops pulled through earlier loops. In weft knitting, a whole piece can come from one yarn. Unsecured loops can be pulled out from the working end: knitters call it ripping back, or frogging. Here the needle and finishing edge are left out so you can get straight to the pulling. The drawing is a loop diagram, not a simulation of yarn tension. Its 192 equal sections are counting units, not measured lengths. Our yarn is dyed section by section; this is not a lesson in changing yarn colors.</p>
