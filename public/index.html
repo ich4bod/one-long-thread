@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css?v=930-dye-drag-20261013">
-  <script type="module" src="app.mjs?v=930-dye-drag-20261013"></script>
+  <link rel="stylesheet" href="style.css?v=931-picture-memory-20261013">
+  <script type="module" src="app.mjs?v=931-picture-memory-20261013"></script>
 </head>
 <body>
   <main>
@@ -96,6 +96,16 @@
           <button id="picture-transform-apply" type="button" aria-describedby="picture-transform-help" disabled>Change this picture</button>
         </div>
         <p id="picture-transform-help">Reflect the picture across the cloth, or cycle its four dye colors. The strand still visits each physical stitch in the same order. Nothing moves while yarn is loose; Undo restores the whole picture.</p>
+        <details id="picture-memory">
+          <summary>Keep one picture</summary>
+          <div class="picture-memory-buttons">
+            <button id="picture-keep" type="button" disabled>Keep this picture</button>
+            <button id="picture-return" type="button" disabled>Return kept picture</button>
+          </div>
+          <p id="kept-picture-label">No picture kept.</p>
+          <div id="kept-picture-plan" role="img" aria-label="Kept picture color plan" hidden></div>
+          <p id="picture-memory-help">Keep one fully knitted picture while you try another. This small color plan is a reference, not loose yarn. Returning replaces the current colors in one Undo step; pulling and choosing pictures never alter the kept plan. It disappears when this page closes.</p>
+        </details>
       </details>
       <details id="about">
         <summary>Is this really knitting?</summary>

@@ -27,6 +27,11 @@ const pictureTransform = document.querySelector('#picture-transform');
 const transformApply = document.querySelector('#picture-transform-apply');
 const palette = [...document.querySelectorAll('.palette [data-color]')];
 const grid = document.querySelector('#paint-grid');
+const pictureKeep = document.querySelector('#picture-keep');
+const pictureReturn = document.querySelector('#picture-return');
+const keptPictureLabel = document.querySelector('#kept-picture-label');
+const keptPicturePlan = document.querySelector('#kept-picture-plan');
+let keptPicture = null;
 let chosenColor = 0;
 let focusedStitch = 0;
 const stitches = [];
@@ -60,6 +65,9 @@ Object.defineProperty(window, 'threadToy', {
 function pictureSnapshot(picture) {
   return { pattern: picture.pattern, colors: picture.colors.slice() };
 }
+function samePicture(a, b) {
+  return a.pattern === b.pattern && a.colors.every((color, index) => color === b.colors[index]);
+}
 function canEditPicture() {
   return state.remaining === 192 && knitTimer === null && gesture === null && dyeStroke === null;
 }
@@ -78,6 +86,43 @@ function restorePicture(from, to) {
   state = { ...state, ...pictureSnapshot(from.pop()) };
   render();
 }
+function refreshPictureMemory() {
+  const editable = canEditPicture();
+  const equalsKept = keptPicture !== null && samePicture(state, keptPicture);
+  pictureKeep.disabled = !editable || equalsKept;
+  pictureReturn.disabled = !editable || keptPicture === null || equalsKept;
+}
+function showKeptPicture() {
+  const names = {
+    moth: 'Moth', stairs: 'Stairs', comet: 'Comet', blank: 'Blank cloth',
+    lantern: 'Lantern', fern: 'Fern', window: 'Window', custom: 'Your picture',
+  };
+  keptPictureLabel.textContent = `Kept picture: ${names[keptPicture.pattern]}.`;
+  keptPicturePlan.replaceChildren();
+  for (let r = 15; r >= 0; r--) {
+    for (let c = 0; c < 12; c++) {
+      const index = r * 12 + (r % 2 === 0 ? c : 11 - c);
+      const square = document.createElement('span');
+      square.dataset.section = String(index);
+      square.dataset.dye = String(keptPicture.colors[index]);
+      square.setAttribute('aria-hidden', 'true');
+      square.style.backgroundColor = colorValues[keptPicture.colors[index]];
+      keptPicturePlan.append(square);
+    }
+  }
+  keptPicturePlan.hidden = false;
+}
+pictureKeep.addEventListener('click', () => {
+  if (!canEditPicture() || (keptPicture !== null && samePicture(state, keptPicture))) return;
+  keptPicture = pictureSnapshot(state);
+  showKeptPicture();
+  refreshPictureMemory();
+});
+pictureReturn.addEventListener('click', () => {
+  if (!canEditPicture() || keptPicture === null || samePicture(state, keptPicture)) return;
+  const candidate = { ...pictureSnapshot(keptPicture), remaining: 192 };
+  commitPicture(candidate);
+});
 undoDye.addEventListener('click', () => restorePicture(undoPictures, redoPictures));
 redoDye.addEventListener('click', () => restorePicture(redoPictures, undoPictures));
 
@@ -125,6 +170,7 @@ function render() {
   refreshTransform();
   undoDye.disabled = !canEditPicture() || undoPictures.length === 0;
   redoDye.disabled = !canEditPicture() || redoPictures.length === 0;
+  refreshPictureMemory();
   document.querySelector('#design-instruction').textContent = locked
     ? 'Knit back before dyeing.'
     : 'Choose a color, then tap a stitch. Dyeing changes the color, not the thread.';
@@ -176,6 +222,7 @@ function knitBack() {
     if (state.remaining < 192) knitTimer = setTimeout(batch, 120);
   }
   knitTimer = setTimeout(batch, 120);
+  refreshPictureMemory();
 }
 
 function finishDyeStroke() {
@@ -206,6 +253,7 @@ function cancelGesture() {
   const pointerId = gesture.pointerId;
   gesture = null;
   if (handle.hasPointerCapture(pointerId)) handle.releasePointerCapture(pointerId);
+  refreshPictureMemory();
 }
 function stop() {
   finishDyeStroke();
@@ -219,6 +267,7 @@ handle.addEventListener('pointerdown', event => {
   cancelKnitting();
   handle.focus({ preventScroll: true });
   gesture = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, travel: 0 };
+  refreshPictureMemory();
   handle.setPointerCapture(event.pointerId);
 });
 handle.addEventListener('pointermove', event => {

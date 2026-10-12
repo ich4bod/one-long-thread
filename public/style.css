@@ -59,6 +59,10 @@ button:disabled { cursor: not-allowed; }
 .palette button:disabled { opacity: .6; }
 #design .dye-history { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 #design .dye-history button:disabled { opacity: .6; }
+#picture-memory .picture-memory-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+#kept-picture-plan { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1px; width: min(100%, 240px); padding: 4px; background: #07121b; }
+#kept-picture-plan[hidden] { display: none !important; }
+#kept-picture-plan [data-section] { aspect-ratio: 1; border: 1px solid #526671; }
 #dye-history-help { font: 16px/1.5 system-ui, sans-serif; }
 #design #picture-transform-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 16px/1.5 system-ui, sans-serif; }
 #design #picture-transform, #design #picture-transform-apply { min-width: 45px; min-height: 45px; max-width: 100%; }
