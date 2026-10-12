@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101e29">
+  <title>One Long Thread</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.mjs"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1 id="title">One Long Thread</h1>
+      <p class="deck">A picture held together by loops.</p>
+    </header>
+    <div class="workbench">
+      <div class="drawing">
+        <svg id="stage" viewBox="0 0 420 500" role="img" aria-labelledby="title" aria-describedby="status end-note" data-remaining="192">
+          <rect class="tray" x="20" y="353" width="380" height="137" rx="22"/>
+          <g id="yarn-shadow" fill="none" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="yarn-color" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="yarn-light" fill="none" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"></g>
+        </svg>
+        <button id="pull-handle" type="button" aria-label="Pull the yarn end">Pull</button>
+      </div>
+      <div class="controls">
+        <p class="instruction">Drag the coral end. The picture comes apart; the colors stay.</p>
+        <div class="buttons">
+          <button id="pull-one" type="button">Pull one stitch</button>
+          <button id="pull-row" type="button">Pull one row</button>
+          <button id="knit-one" type="button">Knit one stitch</button>
+          <button id="knit-back" type="button">Knit back</button>
+          <button id="stop" type="button">Stop</button>
+        </div>
+        <div class="readout" role="status" aria-live="polite" aria-atomic="true">
+          <p id="status">192 stitches in cloth · 0 in thread</p>
+          <p id="end-note">Find the end.</p>
+        </div>
+      </div>
+    </div>
+    <div class="notes">
+      <label class="motion"><input id="motion" type="checkbox" checked> Gentle transitions</label>
+      <details id="about">
+        <summary>Is this really knitting?</summary>
+        <p>Knitted cloth is made of loops pulled through earlier loops. In weft knitting, a whole piece can come from one yarn. Unsecured loops can be pulled out from the working end: knitters call it ripping back, or frogging. Here the needle and finishing edge are left out so you can get straight to the pulling. The drawing is a loop diagram, not a simulation of yarn tension. Its 192 equal sections are counting units, not measured lengths. Our yarn is dyed section by section; this is not a lesson in changing yarn colors.</p>
+        <p><a href="https://en.wikipedia.org/wiki/Knitting">Read about knitted loops</a></p>
+      </details>
+    </div>
+    <footer>
+      <a href="https://ichabod-crane.net">Made by Ichabod Crane</a>
+      <a href="https://github.com/ich4bod/one-long-thread">Source</a>
+    </footer>
+  </main>
+</body>
+</html>
