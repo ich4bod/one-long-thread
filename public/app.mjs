@@ -4,6 +4,10 @@ import { createRenderer } from './render.mjs';
 let state = createState();
 let knitTimer = null;
 let gesture = null;
+const undoPictures = [];
+const redoPictures = [];
+const undoDye = document.querySelector('#dye-undo');
+const redoDye = document.querySelector('#dye-redo');
 const handle = document.querySelector('#pull-handle');
 const stage = document.querySelector('#stage');
 const draw = createRenderer(stage);
@@ -46,6 +50,30 @@ Object.defineProperty(window, 'threadToy', {
   configurable: false,
 });
 
+function pictureSnapshot(picture) {
+  return { pattern: picture.pattern, colors: picture.colors.slice() };
+}
+function canEditPicture() {
+  return state.remaining === 192 && knitTimer === null && gesture === null;
+}
+function commitPicture(next) {
+  if (!canEditPicture() || (next.pattern === state.pattern &&
+      next.colors.every((color, index) => color === state.colors[index]))) return;
+  undoPictures.push(pictureSnapshot(state));
+  if (undoPictures.length > 12) undoPictures.shift();
+  redoPictures.length = 0;
+  state = { ...state, ...pictureSnapshot(next) };
+  render();
+}
+function restorePicture(from, to) {
+  if (!canEditPicture() || from.length === 0) return;
+  to.push(pictureSnapshot(state));
+  state = { ...state, ...pictureSnapshot(from.pop()) };
+  render();
+}
+undoDye.addEventListener('click', () => restorePicture(undoPictures, redoPictures));
+redoDye.addEventListener('click', () => restorePicture(redoPictures, undoPictures));
+
 function render() {
   draw(state);
   document.querySelector('#status').textContent = `${state.remaining} stitches in cloth · ${192 - state.remaining} in thread`;
@@ -55,6 +83,8 @@ function render() {
       : 'The next loop is holding the edge.';
   pattern.value = state.pattern === 'custom' ? '' : state.pattern;
   const locked = state.remaining !== 192;
+  undoDye.disabled = !canEditPicture() || undoPictures.length === 0;
+  redoDye.disabled = !canEditPicture() || redoPictures.length === 0;
   document.querySelector('#design-instruction').textContent = locked
     ? 'Knit back before dyeing.'
     : 'Choose a color, then tap a stitch. Dyeing changes the color, not the thread.';
@@ -164,6 +194,8 @@ for (const [id, operation, count] of [
 pattern.addEventListener('change', () => {
   stop();
   state = choosePattern(state, pattern.value);
+  undoPictures.length = 0;
+  redoPictures.length = 0;
   render();
 });
 for (const button of palette) {
@@ -184,10 +216,7 @@ for (let position = 0; position < stitches.length; position++) {
   });
   button.addEventListener('click', () => {
     const index = Number(button.dataset.index);
-    const next = paint(state, index, chosenColor);
-    if (next.colors[index] === state.colors[index]) return;
-    state = next;
-    render();
+    commitPicture(paint(state, index, chosenColor));
   });
   button.addEventListener('keydown', event => {
     const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -12, ArrowDown: 12 };

@@ -52,6 +52,9 @@ select { font: inherit; color: var(--cream); background: var(--tray); border: 1p
 .palette button[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--table), 0 0 0 4px var(--cream); border-color: var(--table); }
 button:disabled { cursor: not-allowed; }
 .palette button:disabled { opacity: .6; }
+#design .dye-history { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+#design .dye-history button:disabled { opacity: .6; }
+#dye-history-help { font: 16px/1.5 system-ui, sans-serif; }
 .editor-scroll { overflow-x: auto; padding: 8px; border: 1px solid #526671; border-radius: 9px; background: #07121b; }
 #paint-grid { display: grid; gap: 3px; min-width: 573px; }
 #paint-grid [role="row"] { display: grid; grid-template-columns: repeat(12, minmax(45px, 1fr)); gap: 3px; }

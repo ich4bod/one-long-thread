@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="app.mjs"></script>
+  <link rel="stylesheet" href="style.css?v=924-dye-history-20261012">
+  <script type="module" src="app.mjs?v=924-dye-history-20261012"></script>
 </head>
 <body>
   <main>
@@ -61,6 +61,11 @@
         <div class="editor-scroll">
           <div id="paint-grid" role="grid" aria-labelledby="design-title" aria-describedby="design-instruction" aria-rowcount="16" aria-colcount="12"></div>
         </div>
+        <div class="dye-history">
+          <button id="dye-undo" type="button" disabled>Undo dye</button>
+          <button id="dye-redo" type="button" disabled>Redo dye</button>
+        </div>
+        <p id="dye-history-help">Undo and redo remember up to twelve dye edits. Pulling only changes how much is knitted. Knit back before undoing; choosing a picture starts a fresh dye history.</p>
       </details>
       <details id="about">
         <summary>Is this really knitting?</summary>
