@@ -42,7 +42,7 @@
     <div class="notes">
       <label class="motion"><input id="motion" type="checkbox" checked> Gentle transitions</label>
       <details id="design">
-        <summary>Dye your own</summary>
+        <summary id="design-title">Dye your own</summary>
         <label class="picture" for="pattern">Picture
           <select id="pattern" aria-describedby="pattern-help">
             <option value="moth">Moth</option>
@@ -59,7 +59,7 @@
           <button type="button" data-color="3" aria-pressed="false">Moss</button>
         </div>
         <div class="editor-scroll">
-          <div id="paint-grid" aria-describedby="design-instruction"></div>
+          <div id="paint-grid" role="grid" aria-labelledby="design-title" aria-describedby="design-instruction" aria-rowcount="16" aria-colcount="12"></div>
         </div>
       </details>
       <details id="about">

@@ -21,6 +21,9 @@ let focusedStitch = 0;
 const stitches = [];
 // Display top to bottom, left to right; strand order reverses on odd rows.
 for (let r = 15; r >= 0; r--) {
+  const row = document.createElement('div');
+  row.setAttribute('role', 'row');
+  grid.append(row);
   for (let c = 0; c < 12; c++) {
     const index = r * 12 + (r % 2 === 0 ? c : 11 - c);
     const button = document.createElement('button');
@@ -29,8 +32,11 @@ for (let r = 15; r >= 0; r--) {
     button.tabIndex = stitches.length === focusedStitch ? 0 : -1;
     button.setAttribute('aria-label', `Row ${r + 1}, stitch ${c + 1}: ${colorNames[state.colors[index]]}`);
     button.style.setProperty('--dye', colorValues[state.colors[index]]);
+    const cell = document.createElement('div');
+    cell.setAttribute('role', 'gridcell');
+    cell.append(button);
     stitches.push(button);
-    grid.append(button);
+    row.append(cell);
   }
 }
 

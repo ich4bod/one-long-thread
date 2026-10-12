@@ -53,8 +53,9 @@ select { font: inherit; color: var(--cream); background: var(--tray); border: 1p
 button:disabled { cursor: not-allowed; }
 .palette button:disabled { opacity: .6; }
 .editor-scroll { overflow-x: auto; padding: 8px; border: 1px solid #526671; border-radius: 9px; background: #07121b; }
-#paint-grid { display: grid; grid-template-columns: repeat(12, minmax(45px, 1fr)); gap: 3px; min-width: 573px; }
-#paint-grid button { border-radius: 3px; padding: 0; background: var(--dye); border: 2px solid transparent; cursor: crosshair; }
+#paint-grid { display: grid; gap: 3px; min-width: 573px; }
+#paint-grid [role="row"] { display: grid; grid-template-columns: repeat(12, minmax(45px, 1fr)); gap: 3px; }
+#paint-grid button { width: 100%; border-radius: 3px; padding: 0; background: var(--dye); border: 2px solid transparent; cursor: crosshair; }
 #paint-grid button:hover:not(:disabled) { border-color: var(--table); }
 #paint-grid button:focus-visible { outline-offset: 0; outline-color: var(--cream); border-color: var(--table); position: relative; z-index: 1; }
 #paint-grid button:disabled { cursor: not-allowed; }
