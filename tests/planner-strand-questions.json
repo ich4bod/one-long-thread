@@ -1,0 +1,20 @@
+{
+  "lead": "These questions concern this loop diagram. The sections are counting units, not measured yarn lengths.",
+  "questions": [
+    {
+      "title": "Did pulling use up the colors?",
+      "prompt": "Pull one row, then knit it back. Compare the picture rather than choosing a new motif.",
+      "answer": "The same 192 color entries stay on the strand. Pulling changes how many sections remain in cloth; knitting returns those sections in their original order. Choosing a new picture is a different action and replaces the color plan. Nothing here simulates yarn stretching or a change in physical length."
+    },
+    {
+      "title": "Why does the next row run the other way?",
+      "prompt": "In Dye your own, move focus across the top row and read the stitch's strand section. Then move down to the next row without dyeing.",
+      "answer": "The strand crosses alternate physical rows in opposite directions. In this diagram the top-left section is 192 and is released first from full cloth. The top-right section is 181, released twelfth; the next row's leftmost section is 169, released twenty-fourth. The row and column name a place, while the strand number names an order. Arrow keys only explore the grid."
+    },
+    {
+      "title": "Can Undo dye put the cloth back?",
+      "prompt": "Dye one stitch, pull one row, and inspect Undo dye before knitting back.",
+      "answer": "No. Dye history remembers pictures, not the amount of yarn released. Undo dye is unavailable while any sections are loose. Knit back first; then Undo restores the earlier color plan without changing how much is knitted. Choosing a motif starts a new dye history instead of adding another remembered edit."
+    }
+  ]
+}
