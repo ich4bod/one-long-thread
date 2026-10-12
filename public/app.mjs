@@ -1,4 +1,4 @@
-import { createState, pull, knit, paintArea, choosePattern } from './model.mjs?v=925-dye-area-20261013';
+import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=926-picture-transform-20261013';
 import { createRenderer } from './render.mjs';
 
 let state = createState();
@@ -20,6 +20,8 @@ const colorValues = ['#f4e6c8', '#bf593f', '#ee997b', '#819480'];
 const pattern = document.querySelector('#pattern');
 const dyeArea = document.querySelector('#dye-area');
 let chosenArea = dyeArea.value;
+const pictureTransform = document.querySelector('#picture-transform');
+const transformApply = document.querySelector('#picture-transform-apply');
 const palette = [...document.querySelectorAll('.palette [data-color]')];
 const grid = document.querySelector('#paint-grid');
 let chosenColor = 0;
@@ -76,6 +78,23 @@ function restorePicture(from, to) {
 undoDye.addEventListener('click', () => restorePicture(undoPictures, redoPictures));
 redoDye.addEventListener('click', () => restorePicture(redoPictures, undoPictures));
 
+function transformCandidate() {
+  return transformPicture(state, pictureTransform.value);
+}
+function canApplyTransform(candidate) {
+  return canEditPicture() && candidate.colors.some((color, index) => color !== state.colors[index]);
+}
+function refreshTransform() {
+  pictureTransform.disabled = !canEditPicture();
+  transformApply.disabled = !canApplyTransform(transformCandidate());
+}
+pictureTransform.addEventListener('change', refreshTransform);
+transformApply.addEventListener('click', () => {
+  const candidate = transformCandidate();
+  if (!canApplyTransform(candidate)) return;
+  commitPicture(candidate);
+});
+
 function render() {
   draw(state);
   document.querySelector('#status').textContent = `${state.remaining} stitches in cloth · ${192 - state.remaining} in thread`;
@@ -86,6 +105,7 @@ function render() {
   pattern.value = state.pattern === 'custom' ? '' : state.pattern;
   const locked = state.remaining !== 192;
   dyeArea.disabled = !canEditPicture();
+  refreshTransform();
   undoDye.disabled = !canEditPicture() || undoPictures.length === 0;
   redoDye.disabled = !canEditPicture() || redoPictures.length === 0;
   document.querySelector('#design-instruction').textContent = locked

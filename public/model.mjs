@@ -100,6 +100,24 @@ export function paintArea(state, index, color, area) {
   return next;
 }
 
+export function transformPicture(state, kind) {
+  const next = copyState(state);
+  if (state.remaining !== SECTIONS ||
+      !['left-right', 'top-bottom', 'half-turn', 'colors-forward', 'colors-back'].includes(kind)) return next;
+  const at = (r, c) => r * COLUMNS + (r % 2 ? COLUMNS - 1 - c : c);
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLUMNS; c++) {
+      const index = at(r, c);
+      if (kind === 'left-right') next.colors[index] = state.colors[at(r, COLUMNS - 1 - c)];
+      else if (kind === 'top-bottom') next.colors[index] = state.colors[at(ROWS - 1 - r, c)];
+      else if (kind === 'half-turn') next.colors[index] = state.colors[at(ROWS - 1 - r, COLUMNS - 1 - c)];
+      else next.colors[index] = (state.colors[index] + (kind === 'colors-forward' ? 1 : 3)) % 4;
+    }
+  }
+  if (next.colors.some((color, index) => color !== state.colors[index])) next.pattern = 'custom';
+  return next;
+}
+
 export function choosePattern(state, name) {
   if (!['moth', 'stairs', 'comet'].includes(name)) {
     throw new RangeError(`Unknown pattern: ${name}`);

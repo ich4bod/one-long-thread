@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css?v=925-dye-area-20261013">
-  <script type="module" src="app.mjs?v=925-dye-area-20261013"></script>
+  <link rel="stylesheet" href="style.css?v=926-picture-transform-20261013">
+  <script type="module" src="app.mjs?v=926-picture-transform-20261013"></script>
 </head>
 <body>
   <main>
@@ -75,6 +75,18 @@
           <button id="dye-redo" type="button" disabled>Redo dye</button>
         </div>
         <p id="dye-history-help">Undo and redo remember up to twelve dye edits. Pulling only changes how much is knitted. Knit back before undoing; choosing a picture starts a fresh dye history.</p>
+        <div id="picture-transform-controls">
+          <label for="picture-transform">Picture change</label>
+          <select id="picture-transform" aria-describedby="picture-transform-help">
+            <option value="left-right" selected>Reflect left and right</option>
+            <option value="top-bottom">Reflect top and bottom</option>
+            <option value="half-turn">Turn the picture halfway</option>
+            <option value="colors-forward">Cycle dye colors forward</option>
+            <option value="colors-back">Cycle dye colors back</option>
+          </select>
+          <button id="picture-transform-apply" type="button" aria-describedby="picture-transform-help" disabled>Change this picture</button>
+        </div>
+        <p id="picture-transform-help">Reflect the picture across the cloth, or cycle its four dye colors. The strand still visits each physical stitch in the same order. Nothing moves while yarn is loose; Undo restores the whole picture.</p>
       </details>
       <details id="about">
         <summary>Is this really knitting?</summary>
