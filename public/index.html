@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css?v=924-dye-history-20261012">
-  <script type="module" src="app.mjs?v=924-dye-history-20261012"></script>
+  <link rel="stylesheet" href="style.css?v=925-dye-area-20261013">
+  <script type="module" src="app.mjs?v=925-dye-area-20261013"></script>
 </head>
 <body>
   <main>
@@ -52,6 +52,15 @@
         </label>
         <p id="pattern-help">Choosing a picture knits all 192 stitches again.</p>
         <p id="design-instruction">Choose a color, then tap a stitch. Dyeing changes the color, not the thread.</p>
+        <label class="dye-area" for="dye-area">Dye area
+          <select id="dye-area" aria-describedby="dye-area-help">
+            <option value="stitch" selected>One stitch</option>
+            <option value="patch">Connected color</option>
+            <option value="row">Whole row</option>
+            <option value="column">Whole column</option>
+          </select>
+        </label>
+        <p id="dye-area-help">Choose how far one tap dyes: one stitch, its connected same-color patch, its physical row, or its physical column. A patch joins only across shared edges. Undo treats the whole tap as one edit.</p>
         <div class="palette">
           <button type="button" data-color="0" aria-pressed="true">Cream</button>
           <button type="button" data-color="1" aria-pressed="false">Rust</button>

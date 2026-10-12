@@ -63,6 +63,43 @@ export function paint(state, index, color) {
   return next;
 }
 
+export function paintArea(state, index, color, area) {
+  const next = copyState(state);
+  if (state.remaining !== SECTIONS ||
+      !Number.isInteger(index) || index < 0 || index >= SECTIONS ||
+      !Number.isInteger(color) || color < 0 || color > 3 ||
+      !['stitch', 'patch', 'row', 'column'].includes(area)) return next;
+  const row = Math.floor(index / COLUMNS);
+  const column = row % 2 ? COLUMNS - 1 - index % COLUMNS : index % COLUMNS;
+  const at = (r, c) => r * COLUMNS + (r % 2 ? COLUMNS - 1 - c : c);
+  const members = [];
+  if (area === 'stitch') members.push(index);
+  else if (area === 'row') {
+    for (let c = 0; c < COLUMNS; c++) members.push(at(row, c));
+  } else if (area === 'column') {
+    for (let r = 0; r < ROWS; r++) members.push(at(r, column));
+  } else {
+    const originalColor = state.colors[index];
+    const queue = [[row, column]];
+    const seen = new Set();
+    for (let cursor = 0; cursor < queue.length; cursor++) {
+      const [r, c] = queue[cursor];
+      if (r < 0 || r >= ROWS || c < 0 || c >= COLUMNS) continue;
+      const i = at(r, c);
+      if (seen.has(i) || state.colors[i] !== originalColor) continue;
+      seen.add(i);
+      members.push(i);
+      queue.push([r - 1, c], [r + 1, c], [r, c - 1], [r, c + 1]);
+    }
+  }
+  for (const i of members) {
+    if (state.colors[i] === color) continue;
+    next.colors[i] = color;
+    next.pattern = 'custom';
+  }
+  return next;
+}
+
 export function choosePattern(state, name) {
   if (!['moth', 'stairs', 'comet'].includes(name)) {
     throw new RangeError(`Unknown pattern: ${name}`);

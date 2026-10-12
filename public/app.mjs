@@ -1,4 +1,4 @@
-import { createState, pull, knit, paint, choosePattern } from './model.mjs';
+import { createState, pull, knit, paintArea, choosePattern } from './model.mjs?v=925-dye-area-20261013';
 import { createRenderer } from './render.mjs';
 
 let state = createState();
@@ -18,6 +18,8 @@ motion.checked = !reducedMotion.matches;
 const colorNames = ['Cream', 'Rust', 'Coral', 'Moss'];
 const colorValues = ['#f4e6c8', '#bf593f', '#ee997b', '#819480'];
 const pattern = document.querySelector('#pattern');
+const dyeArea = document.querySelector('#dye-area');
+let chosenArea = dyeArea.value;
 const palette = [...document.querySelectorAll('.palette [data-color]')];
 const grid = document.querySelector('#paint-grid');
 let chosenColor = 0;
@@ -83,6 +85,7 @@ function render() {
       : 'The next loop is holding the edge.';
   pattern.value = state.pattern === 'custom' ? '' : state.pattern;
   const locked = state.remaining !== 192;
+  dyeArea.disabled = !canEditPicture();
   undoDye.disabled = !canEditPicture() || undoPictures.length === 0;
   redoDye.disabled = !canEditPicture() || redoPictures.length === 0;
   document.querySelector('#design-instruction').textContent = locked
@@ -198,6 +201,13 @@ pattern.addEventListener('change', () => {
   redoPictures.length = 0;
   render();
 });
+dyeArea.addEventListener('change', () => {
+  if (!canEditPicture()) {
+    dyeArea.value = chosenArea;
+    return;
+  }
+  chosenArea = dyeArea.value;
+});
 for (const button of palette) {
   button.addEventListener('click', () => {
     if (state.remaining !== 192) return;
@@ -215,8 +225,9 @@ for (let position = 0; position < stitches.length; position++) {
     button.tabIndex = 0;
   });
   button.addEventListener('click', () => {
+    if (!canEditPicture()) return;
     const index = Number(button.dataset.index);
-    commitPicture(paint(state, index, chosenColor));
+    commitPicture(paintArea(state, index, chosenColor, dyeArea.value));
   });
   button.addEventListener('keydown', event => {
     const offsets = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -12, ArrowDown: 12 };

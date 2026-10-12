@@ -43,6 +43,8 @@ summary { min-height: 45px; padding: 10px 0; cursor: pointer; }
 details p { margin: 10px 0 16px; }
 select { font: inherit; color: var(--cream); background: var(--tray); border: 1px solid #526671; border-radius: 9px; min-height: 45px; padding: 8px 12px; }
 .picture { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+#design .dye-area { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 16px/1.5 system-ui, sans-serif; min-height: 45px; }
+#design #dye-area { min-width: 45px; }
 .palette { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
 .palette button { color: var(--table); background: var(--dye); border: 2px solid transparent; }
 [data-color="0"] { --dye: var(--cream); }
