@@ -56,6 +56,14 @@ for (let r = 15; r >= 0; r--) {
   }
 }
 
+function updateStitchPlace() {
+  const index = Number(stitches[focusedStitch].dataset.index);
+  const r = Math.floor(index / 12);
+  const c = r % 2 ? 11 - index % 12 : index % 12;
+  document.querySelector('#stitch-place').textContent =
+    `Row ${r + 1} · column ${c + 1} · strand section ${index + 1}. From full cloth, pull ${192 - index} releases this section.`;
+}
+
 Object.defineProperty(window, 'threadToy', {
   value: Object.freeze({ getState: () => ({ ...state, colors: state.colors.slice() }) }),
   writable: false,
@@ -150,6 +158,7 @@ transformApply.addEventListener('click', () => {
 
 function render() {
   draw(state);
+  updateStitchPlace();
   document.querySelector('#status').textContent = `${state.remaining} stitches in cloth · ${192 - state.remaining} in thread`;
   const newPictureEndNotes = {
     blank: 'Nothing lost. Just no longer blank cloth.',
@@ -380,6 +389,7 @@ for (let position = 0; position < stitches.length; position++) {
     stitches[focusedStitch].tabIndex = -1;
     focusedStitch = position;
     button.tabIndex = 0;
+    updateStitchPlace();
   });
   button.addEventListener('click', () => {
     if (!canEditPicture()) return;
