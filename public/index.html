@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css?v=stitch-place-20261013">
+  <link rel="stylesheet" href="style.css?v=strand-questions-20261013">
   <script type="module" src="app.mjs?v=all-color-20261013"></script>
 </head>
 <body>
@@ -113,6 +113,33 @@
         <summary>Is this really knitting?</summary>
         <p>Knitted cloth is made of loops pulled through earlier loops. In weft knitting, a whole piece can come from one yarn. Unsecured loops can be pulled out from the working end: knitters call it ripping back, or frogging. Here the needle and finishing edge are left out so you can get straight to the pulling. The drawing is a loop diagram, not a simulation of yarn tension. Its 192 equal sections are counting units, not measured lengths. Our yarn is dyed section by section; this is not a lesson in changing yarn colors.</p>
         <p><a href="https://en.wikipedia.org/wiki/Knitting">Read about knitted loops</a></p>
+        <section id="strand-questions">
+          <p>These questions concern this loop diagram. The sections are counting units, not measured yarn lengths.</p>
+          <section>
+            <h3>Did pulling use up the colors?</h3>
+            <p>Pull one row, then knit it back. Compare the picture rather than choosing a new motif.</p>
+            <details>
+              <summary>Read an answer</summary>
+              <p>The same 192 color entries stay on the strand. Pulling changes how many sections remain in cloth; knitting returns those sections in their original order. Choosing a new picture is a different action and replaces the color plan. Nothing here simulates yarn stretching or a change in physical length.</p>
+            </details>
+          </section>
+          <section>
+            <h3>Why does the next row run the other way?</h3>
+            <p>In Dye your own, move focus across the top row and read the stitch's strand section. Then move down to the next row without dyeing.</p>
+            <details>
+              <summary>Read an answer</summary>
+              <p>The strand crosses alternate physical rows in opposite directions. In this diagram the top-left section is 192 and is released first from full cloth. The top-right section is 181, released twelfth; the next row's leftmost section is 169, released twenty-fourth. The row and column name a place, while the strand number names an order. Arrow keys only explore the grid.</p>
+            </details>
+          </section>
+          <section>
+            <h3>Can Undo dye put the cloth back?</h3>
+            <p>Dye one stitch, pull one row, and inspect Undo dye before knitting back.</p>
+            <details>
+              <summary>Read an answer</summary>
+              <p>No. Dye history remembers pictures, not the amount of yarn released. Undo dye is unavailable while any sections are loose. Knit back first; then Undo restores the earlier color plan without changing how much is knitted. Choosing a motif starts a new dye history instead of adding another remembered edit.</p>
+            </details>
+          </section>
+        </section>
       </details>
     </div>
     <footer>

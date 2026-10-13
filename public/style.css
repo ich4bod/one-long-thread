@@ -41,6 +41,13 @@ input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--coral); 
 details { margin-top: 14px; border-top: 1px solid #314753; padding-top: 6px; }
 summary { min-height: 45px; padding: 10px 0; cursor: pointer; }
 details p { margin: 10px 0 16px; }
+#strand-questions { min-width: 0; max-width: 100%; margin-top: 16px; }
+#strand-questions > section { min-width: 0; max-width: 100%; margin-top: 16px; }
+#strand-questions h3 { margin: 0 0 8px; font: normal 18px/1.5 Georgia, serif; }
+#strand-questions details { margin-top: 8px; }
+#strand-questions details > summary { min-height: 45px; }
+#strand-questions details > p { margin: 8px 0; }
+#strand-questions summary:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
 select { font: inherit; color: var(--cream); background: var(--tray); border: 1px solid #526671; border-radius: 9px; min-height: 45px; padding: 8px 12px; }
 .picture { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
 #design .dye-area { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 16px/1.5 system-ui, sans-serif; min-height: 45px; }
