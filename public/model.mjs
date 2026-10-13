@@ -139,7 +139,8 @@ export function paintArea(state, index, color, area) {
 export function transformPicture(state, kind, options) {
   const next = copyState(state);
   const transforms = ['left-right', 'top-bottom', 'half-turn', 'colors-forward', 'colors-back',
-    'shift-left', 'shift-right', 'shift-up', 'shift-down', 'swap-colors'];
+    'shift-left', 'shift-right', 'shift-up', 'shift-down', 'swap-colors',
+    'left-onto-right', 'right-onto-left', 'bottom-onto-top', 'top-onto-bottom'];
   if (state.remaining !== SECTIONS || !transforms.includes(kind)) return next;
   if (kind === 'swap-colors') {
     const { from, to } = options ?? {};
@@ -161,6 +162,11 @@ export function transformPicture(state, kind, options) {
       else if (kind === 'shift-right') next.colors[index] = state.colors[at(r, (c + COLUMNS - 1) % COLUMNS)];
       else if (kind === 'shift-up') next.colors[index] = state.colors[at((r + ROWS - 1) % ROWS, c)];
       else if (kind === 'shift-down') next.colors[index] = state.colors[at((r + 1) % ROWS, c)];
+      else if (kind === 'left-onto-right' && c >= COLUMNS / 2) next.colors[index] = state.colors[at(r, COLUMNS - 1 - c)];
+      else if (kind === 'right-onto-left' && c < COLUMNS / 2) next.colors[index] = state.colors[at(r, COLUMNS - 1 - c)];
+      else if (kind === 'bottom-onto-top' && r >= ROWS / 2) next.colors[index] = state.colors[at(ROWS - 1 - r, c)];
+      else if (kind === 'top-onto-bottom' && r < ROWS / 2) next.colors[index] = state.colors[at(ROWS - 1 - r, c)];
+      else if (!kind.startsWith('colors-')) next.colors[index] = state.colors[index];
       else next.colors[index] = (state.colors[index] + (kind === 'colors-forward' ? 1 : 3)) % 4;
     }
   }
