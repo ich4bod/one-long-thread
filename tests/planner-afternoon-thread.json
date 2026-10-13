@@ -1,0 +1,177 @@
+{
+  "shapes": {
+    "title": "One Long Thread \u2014 Dye corners an inner edge or the central patch",
+    "mode": "area",
+    "picker": "dye-area",
+    "helpID": "dye-shaped-patches-help",
+    "help": "Corners, inner edge and central patch ignore where you tap. Corners changes four stitches; inner edge changes forty-four; central patch changes forty-eight. Everything outside the chosen shape keeps its dye. Undo restores the whole decision.",
+    "opts": [
+      [
+        "four-corners",
+        "Four corners"
+      ],
+      [
+        "inner-frame",
+        "One stitch inside the edge"
+      ],
+      [
+        "center-patch",
+        "Central eight by six patch"
+      ]
+    ],
+    "key": "shapes",
+    "message": "shapes choices preserve physical dye membership one-edit history and loose-yarn locks"
+  },
+  "half-shifts": {
+    "title": "One Long Thread \u2014 Exchange the two halves by wrapping the picture",
+    "mode": "transform",
+    "picker": "picture-transform",
+    "helpID": "picture-half-shifts-help",
+    "help": "Move halfway across twelve columns, halfway across sixteen rows, or both. The moved picture wraps; no dye is copied or lost. Each move exchanges two equal halves, so doing it twice restores the picture. Undo remains one edit.",
+    "opts": [
+      [
+        "shift-half-columns",
+        "Move six columns"
+      ],
+      [
+        "shift-half-rows",
+        "Move eight rows"
+      ],
+      [
+        "shift-half-both",
+        "Move both halfways"
+      ]
+    ],
+    "key": "half-shifts",
+    "message": "half-shifts choices preserve physical dye membership one-edit history and loose-yarn locks"
+  },
+  "regional-dyes": {
+    "title": "One Long Thread \u2014 Cycle the dye in one half and leave the other alone",
+    "mode": "transform",
+    "picker": "picture-transform",
+    "helpID": "picture-regional-dyes-help",
+    "help": "Cycle only the chosen physical half through Cream, Rust, Coral and Moss. The other half stays unchanged. Four cycles restore the dyes; the picture still becomes your own edited picture. Undo restores each single cycle.",
+    "opts": [
+      [
+        "cycle-left-half",
+        "Cycle left-half dyes"
+      ],
+      [
+        "cycle-right-half",
+        "Cycle right-half dyes"
+      ],
+      [
+        "cycle-lower-half",
+        "Cycle lower-half dyes"
+      ],
+      [
+        "cycle-upper-half",
+        "Cycle upper-half dyes"
+      ]
+    ],
+    "key": "regional-dyes",
+    "message": "regional-dyes choices preserve physical dye membership one-edit history and loose-yarn locks"
+  },
+  "stripe-phases": {
+    "title": "One Long Thread \u2014 Dye every third physical row or column from a tapped stitch",
+    "mode": "area",
+    "picker": "dye-area",
+    "helpID": "dye-third-stripes-help",
+    "help": "Tap to choose one of three stripe positions. Every third row keeps rows with the same row remainder; every third column does the same for columns. Both stripes dyes their union, with crossing stitches counted once. These are physical stripes, not every third section of the strand.",
+    "opts": [
+      [
+        "third-rows",
+        "Every third row"
+      ],
+      [
+        "third-columns",
+        "Every third column"
+      ],
+      [
+        "third-both",
+        "Both third-stripes"
+      ]
+    ],
+    "key": "stripe-phases",
+    "message": "stripe-phases choices preserve physical dye membership one-edit history and loose-yarn locks"
+  },
+  "motifs": {
+    "title": "One Long Thread \u2014 Start a house waves or a diamond before pulling its yarn",
+    "mode": "pattern",
+    "picker": "pattern",
+    "helpID": "picture-three-motifs-help",
+    "help": "House, Waves and Diamond are small authored dye plans on the same cloth. Choosing one starts full cloth and clears dye history, just like the older pictures. Keeping a picture saves its dye plan, not its loose-yarn progress.",
+    "opts": [
+      [
+        "house",
+        "House"
+      ],
+      [
+        "waves",
+        "Waves"
+      ],
+      [
+        "diamond",
+        "Diamond"
+      ]
+    ],
+    "physicalRows": {
+      "house": [
+        "000000000000",
+        "000000000000",
+        "000000000000",
+        "003333333300",
+        "003322223300",
+        "003322223300",
+        "003300003300",
+        "003300003300",
+        "003333333300",
+        "000111111000",
+        "000011110000",
+        "000001100000",
+        "000000000000",
+        "000000000000",
+        "000000000000",
+        "000000000000"
+      ],
+      "waves": [
+        "000000000000",
+        "003300330033",
+        "030033003300",
+        "300330033003",
+        "000000000000",
+        "002200220022",
+        "020022002200",
+        "200220022002",
+        "000000000000",
+        "001100110011",
+        "010011001100",
+        "100110011001",
+        "000000000000",
+        "003300330033",
+        "030033003300",
+        "300330033003"
+      ],
+      "diamond": [
+        "000000000000",
+        "000000000000",
+        "000000000000",
+        "000001100000",
+        "000012210000",
+        "000122221000",
+        "001222222100",
+        "012222222210",
+        "012222222210",
+        "001222222100",
+        "000122221000",
+        "000012210000",
+        "000001100000",
+        "000000000000",
+        "000000000000",
+        "000000000000"
+      ]
+    },
+    "key": "motifs",
+    "message": "motifs choices preserve physical dye membership one-edit history and loose-yarn locks"
+  }
+}

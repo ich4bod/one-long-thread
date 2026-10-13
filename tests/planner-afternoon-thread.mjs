@@ -1,0 +1,13 @@
+import A from 'node:assert/strict';import fs from 'node:fs';import{createState,choosePattern,paintArea,transformPicture,pull}from '../public/model.mjs';
+const S=JSON.parse(fs.readFileSync(new URL('./planner-afternoon-thread.json',import.meta.url)))[process.argv[2]];A(S);const at=(r,c)=>r*12+(r%2?11-c:c);
+function expected(s,k,index=0,dye=2){const out=s.colors.slice(),rr=Math.floor(index/12),cc=rr%2?11-index%12:index%12;for(let r=0;r<16;r++)for(let c=0;c<12;c++){let member=false;
+if(k==='four-corners')member=(r===0||r===15)&&(c===0||c===11);
+if(k==='inner-frame')member=r>=1&&r<=14&&c>=1&&c<=10&&(r===1||r===14||c===1||c===10);
+if(k==='center-patch')member=r>=4&&r<=11&&c>=3&&c<=8;
+if(k==='third-rows')member=r%3===rr%3;if(k==='third-columns')member=c%3===cc%3;if(k==='third-both')member=r%3===rr%3||c%3===cc%3;
+if(member)out[at(r,c)]=dye;
+if(k.startsWith('shift-half-'))out[at(r,c)]=s.colors[at((r+(k==='shift-half-columns'?0:8))%16,(c+(k==='shift-half-rows'?0:6))%12)];
+if((k==='cycle-left-half'&&c<6)||(k==='cycle-right-half'&&c>=6)||(k==='cycle-lower-half'&&r<8)||(k==='cycle-upper-half'&&r>=8))out[at(r,c)]=(s.colors[at(r,c)]+1)%4;
+}return out}
+if(S.mode==='pattern'){for(const[k]of S.opts){const n=createState({pattern:k}),expectedColors=Array.from({length:192},(_,i)=>{let r=Math.floor(i/12),c=r%2?11-i%12:i%12;return Number(S.physicalRows[k][r][c])});A.deepEqual(n,{pattern:k,remaining:192,colors:expectedColors});A.deepEqual(choosePattern(pull(createState(),40),k),n);for(let count of[1,12,192])A.deepEqual(pull(n,count).colors,expectedColors)}}else for(const pattern of['moth','stairs','comet','blank','lantern','fern','window']){const s=createState({pattern}),saved=structuredClone(s);for(const[k]of S.opts){if(S.mode==='area'){for(let i=0;i<192;i++)for(let d=0;d<4;d++){const exp=expected(s,k,i,d),n=paintArea(s,i,d,k);A.deepEqual(n.colors,exp);A.equal(n.remaining,192);A.equal(n.pattern,exp.some((v,j)=>v!==s.colors[j])?'custom':pattern);A.deepEqual(paintArea(pull(s,1),i,d,k),pull(s,1))}for(let i of[-1,192,.5,NaN])A.deepEqual(paintArea(s,i,2,k),s);for(let d of[-1,4,.5,NaN])A.deepEqual(paintArea(s,0,d,k),s)}else{const exp=expected(s,k),n=transformPicture(s,k);A.deepEqual(n.colors,exp);A.equal(n.remaining,192);A.equal(n.pattern,exp.some((v,j)=>v!==s.colors[j])?'custom':pattern);A.deepEqual(transformPicture(pull(s,1),k),pull(s,1));let repeat=n;for(let j=1;j<(k.startsWith('cycle-')?4:2);j++)repeat=transformPicture(repeat,k);A.deepEqual(repeat.colors,s.colors)}}A.deepEqual(s,saved)}
+console.log(process.argv[2]+' model preserves the supplied physical dye rule and its input picture');
