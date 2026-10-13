@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
-  <link rel="stylesheet" href="style.css?v=picture-shifts-20261013">
-  <script type="module" src="app.mjs?v=picture-shifts-20261013"></script>
+  <link rel="stylesheet" href="style.css?v=picture-swap-20261013">
+  <script type="module" src="app.mjs?v=picture-swap-20261013"></script>
 </head>
 <body>
   <main>
@@ -100,11 +100,29 @@
               <option value="shift-up">Move one row up</option>
               <option value="shift-down">Move one row down</option>
             </optgroup>
+            <option value="swap-colors">Exchange two dye colors</option>
           </select>
+          <div id="picture-swap-controls" hidden>
+            <label for="picture-swap-from">First dye color</label>
+            <select id="picture-swap-from" aria-describedby="picture-swap-help">
+              <option value="0" selected>Cream</option>
+              <option value="1">Rust</option>
+              <option value="2">Coral</option>
+              <option value="3">Moss</option>
+            </select>
+            <label for="picture-swap-to">Second dye color</label>
+            <select id="picture-swap-to" aria-describedby="picture-swap-help">
+              <option value="0">Cream</option>
+              <option value="1" selected>Rust</option>
+              <option value="2">Coral</option>
+              <option value="3">Moss</option>
+            </select>
+          </div>
           <button id="picture-transform-apply" type="button" aria-describedby="picture-transform-help" disabled>Change this picture</button>
         </div>
         <p id="picture-transform-help">Reflect the picture across the cloth, or cycle its four dye colors. The strand still visits each physical stitch in the same order. Nothing moves while yarn is loose; Undo restores the whole picture.</p>
         <p id="picture-shift-help">Move the dye picture one physical stitch left or right, or one row up or down. Colors wrap at the opposite edge; the strand order and 192 stitches stay fixed. Undo takes back the whole shift.</p>
+        <p id="picture-swap-help">Exchange two dye colors everywhere in the picture. Other colors stay as they are, including separate patches. Choosing the colors does nothing until Change this picture; Undo exchanges them back.</p>
         <details id="picture-memory">
           <summary>Keep one picture</summary>
           <div class="picture-memory-buttons">

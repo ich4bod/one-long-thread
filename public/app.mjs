@@ -1,4 +1,4 @@
-import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=picture-shifts-20261013';
+import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=picture-swap-20261013';
 import { createRenderer } from './render.mjs';
 
 let state = createState();
@@ -24,6 +24,9 @@ const dyeArea = document.querySelector('#dye-area');
 const dyeDrag = document.querySelector('#dye-drag');
 let chosenArea = dyeArea.value;
 const pictureTransform = document.querySelector('#picture-transform');
+const pictureSwapControls = document.querySelector('#picture-swap-controls');
+const pictureSwapFrom = document.querySelector('#picture-swap-from');
+const pictureSwapTo = document.querySelector('#picture-swap-to');
 const transformApply = document.querySelector('#picture-transform-apply');
 const palette = [...document.querySelectorAll('.palette [data-color]')];
 const grid = document.querySelector('#paint-grid');
@@ -135,13 +138,21 @@ undoDye.addEventListener('click', () => restorePicture(undoPictures, redoPicture
 redoDye.addEventListener('click', () => restorePicture(redoPictures, undoPictures));
 
 function transformCandidate() {
-  return transformPicture(state, pictureTransform.value);
+  return pictureTransform.value === 'swap-colors'
+    ? transformPicture(state, pictureTransform.value, {
+      from: Number(pictureSwapFrom.value), to: Number(pictureSwapTo.value),
+    })
+    : transformPicture(state, pictureTransform.value);
 }
 function canApplyTransform(candidate) {
   return canEditPicture() && candidate.colors.some((color, index) => color !== state.colors[index]);
 }
 function refreshTransform() {
-  pictureTransform.disabled = !canEditPicture();
+  const editable = canEditPicture();
+  pictureTransform.disabled = !editable;
+  pictureSwapControls.hidden = pictureTransform.value !== 'swap-colors';
+  pictureSwapFrom.disabled = !editable;
+  pictureSwapTo.disabled = !editable;
   transformApply.disabled = !canApplyTransform(transformCandidate());
 }
 function refreshDyeDrag() {
@@ -150,6 +161,8 @@ function refreshDyeDrag() {
   grid.classList.toggle('dye-drag-enabled', dyeDrag.checked && eligible);
 }
 pictureTransform.addEventListener('change', refreshTransform);
+pictureSwapFrom.addEventListener('change', refreshTransform);
+pictureSwapTo.addEventListener('change', refreshTransform);
 transformApply.addEventListener('click', () => {
   const candidate = transformCandidate();
   if (!canApplyTransform(candidate)) return;
@@ -231,6 +244,7 @@ function knitBack() {
     if (state.remaining < 192) knitTimer = setTimeout(batch, 120);
   }
   knitTimer = setTimeout(batch, 120);
+  refreshTransform();
   refreshPictureMemory();
 }
 
@@ -262,6 +276,7 @@ function cancelGesture() {
   const pointerId = gesture.pointerId;
   gesture = null;
   if (handle.hasPointerCapture(pointerId)) handle.releasePointerCapture(pointerId);
+  refreshTransform();
   refreshPictureMemory();
 }
 function stop() {
@@ -276,6 +291,7 @@ handle.addEventListener('pointerdown', event => {
   cancelKnitting();
   handle.focus({ preventScroll: true });
   gesture = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, travel: 0 };
+  refreshTransform();
   refreshPictureMemory();
   handle.setPointerCapture(event.pointerId);
 });

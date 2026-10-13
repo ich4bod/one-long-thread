@@ -73,10 +73,14 @@ button:disabled { cursor: not-allowed; }
 #dye-history-help { font: 16px/1.5 system-ui, sans-serif; }
 #design #picture-transform-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 16px/1.5 system-ui, sans-serif; }
 #design #picture-transform, #design #picture-transform-apply { min-width: 45px; min-height: 45px; max-width: 100%; }
-#design #picture-transform:focus-visible, #design #picture-transform-apply:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
+#design #picture-swap-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font: 16px/1.5 system-ui, sans-serif; }
+#design #picture-swap-controls[hidden] { display: none !important; }
+#design #picture-swap-from, #design #picture-swap-to { min-width: 45px; min-height: 45px; max-width: 100%; padding: 8px; font: 16px/1.5 system-ui, sans-serif; }
+#design #picture-transform:focus-visible, #design #picture-transform-apply:focus-visible, #design #picture-swap-from:focus-visible, #design #picture-swap-to:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
 #design #picture-transform-apply:disabled { opacity: .6; }
 #design #picture-transform-help { font: 16px/1.5 system-ui, sans-serif; }
 #design #picture-shift-help { font: 16px/1.5 system-ui, sans-serif; max-width: 100%; margin: 8px 0; overflow-wrap: anywhere; }
+#design #picture-swap-help { font: 16px/1.5 system-ui, sans-serif; max-width: 100%; margin: 8px 0; overflow-wrap: anywhere; }
 .editor-scroll { overflow-x: auto; padding: 8px; border: 1px solid #526671; border-radius: 9px; background: #07121b; }
 #stitch-place { font: 16px/1.5 system-ui, sans-serif; color: var(--cream); min-width: 0; max-width: 100%; margin: 8px 0; overflow-wrap: anywhere; }
 #paint-grid { display: grid; gap: 3px; min-width: 573px; }

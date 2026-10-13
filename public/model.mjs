@@ -128,11 +128,20 @@ export function paintArea(state, index, color, area) {
   return next;
 }
 
-export function transformPicture(state, kind) {
+export function transformPicture(state, kind, options) {
   const next = copyState(state);
-  if (state.remaining !== SECTIONS ||
-      !['left-right', 'top-bottom', 'half-turn', 'colors-forward', 'colors-back',
-        'shift-left', 'shift-right', 'shift-up', 'shift-down'].includes(kind)) return next;
+  const transforms = ['left-right', 'top-bottom', 'half-turn', 'colors-forward', 'colors-back',
+    'shift-left', 'shift-right', 'shift-up', 'shift-down', 'swap-colors'];
+  if (state.remaining !== SECTIONS || !transforms.includes(kind)) return next;
+  if (kind === 'swap-colors') {
+    const { from, to } = options ?? {};
+    if (!Number.isInteger(from) || from < 0 || from > 3 ||
+        !Number.isInteger(to) || to < 0 || to > 3) return next;
+    if (from === to) return next;
+    next.colors = state.colors.map(color => color === from ? to : color === to ? from : color);
+    if (next.colors.some((color, index) => color !== state.colors[index])) next.pattern = 'custom';
+    return next;
+  }
   const at = (r, c) => r * COLUMNS + (r % 2 ? COLUMNS - 1 - c : c);
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLUMNS; c++) {
