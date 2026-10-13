@@ -91,7 +91,7 @@ export function paintArea(state, index, color, area) {
   if (state.remaining !== SECTIONS ||
       !Number.isInteger(index) || index < 0 || index >= SECTIONS ||
       !Number.isInteger(color) || color < 0 || color > 3 ||
-      !['stitch', 'patch', 'row', 'column'].includes(area)) return next;
+      !['stitch', 'patch', 'row', 'column', 'color'].includes(area)) return next;
   const row = Math.floor(index / COLUMNS);
   const column = row % 2 ? COLUMNS - 1 - index % COLUMNS : index % COLUMNS;
   const at = (r, c) => r * COLUMNS + (r % 2 ? COLUMNS - 1 - c : c);
@@ -101,6 +101,11 @@ export function paintArea(state, index, color, area) {
     for (let c = 0; c < COLUMNS; c++) members.push(at(row, c));
   } else if (area === 'column') {
     for (let r = 0; r < ROWS; r++) members.push(at(r, column));
+  } else if (area === 'color') {
+    const originalColor = state.colors[index];
+    for (let i = 0; i < SECTIONS; i++) {
+      if (state.colors[i] === originalColor) members.push(i);
+    }
   } else {
     const originalColor = state.colors[index];
     const queue = [[row, column]];
