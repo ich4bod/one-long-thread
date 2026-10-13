@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#101e29">
   <title>One Long Thread</title>
   <link rel="stylesheet" href="style.css?v=picture-swap-20261013">
-  <script type="module" src="app.mjs?v=picture-swap-20261013"></script>
+  <script type="module" src="app.mjs?v=physical-rays-20261013"></script>
 </head>
 <body>
   <main>
@@ -66,9 +66,16 @@
             <option value="row">Whole row</option>
             <option value="column">Whole column</option>
             <option value="color">All this color</option>
+            <optgroup label="Toward one edge">
+              <option value="row-left">Row to the left</option>
+              <option value="row-right">Row to the right</option>
+              <option value="column-down">Column downward</option>
+              <option value="column-up">Column upward</option>
+            </optgroup>
           </select>
         </label>
         <p id="dye-area-help">Choose how far one tap dyes: one stitch, its connected same-color patch, its physical row, its physical column, or every stitch with its original color. A patch joins only across shared edges; All this color also reaches separate patches. Undo treats the whole tap as one edit.</p>
+        <p id="dye-rays-help">Dye from the touched stitch to one edge of its physical row or column, including that stitch. Left and right follow the picture, not the strand’s zigzag. Down is toward the bottom row. One tap is one Undo step.</p>
         <label id="dye-drag-label" for="dye-drag"><input id="dye-drag" type="checkbox" aria-describedby="dye-drag-help"> Drag dye across stitches</label>
         <p id="dye-drag-help">With One stitch chosen, drag across the editor to dye the stitches you actually touch. One drag is one Undo step. Releasing, Stop or leaving the page ends the stroke; the dyed colors stay. Keyboard taps still dye one stitch.</p>
         <div class="palette">
