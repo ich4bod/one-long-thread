@@ -1,4 +1,4 @@
-import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=all-color-20261013';
+import { createState, pull, knit, paintArea, transformPicture, choosePattern } from './model.mjs?v=picture-shifts-20261013';
 import { createRenderer } from './render.mjs';
 
 let state = createState();
